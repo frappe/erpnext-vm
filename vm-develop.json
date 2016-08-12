@@ -1,0 +1,56 @@
+{
+	"builders":[{
+		"vm_name": "ERPNext-Dev",
+		"type": "virtualbox-ovf",
+		"format": "ova",
+		"headless": true,
+		"source_path": "base.ova",
+		"guest_additions_path": "/home/frappe/vbox.iso",
+		"ssh_username": "frappe",
+		"ssh_password": "frappe",
+		"ssh_port": 22,
+		"ssh_wait_timeout": "300s",
+		"export_opts": ["--vsys", "0", "--product", "ERPNext", "--producturl", "https://erpnext.com", "--vendor", "Frappe Techonologies", "--vendorurl", "https://frappe.io", "--description", "ERPNext Evaluation VM"],
+		"shutdown_command": " echo 'packer' | sudo shutdown -P -h now",
+		"vboxmanage": [
+			[ "modifyvm", "{{.Name}}", "--memory", "512" ],
+			[ "modifyvm", "{{.Name}}", "--audio", "none" ],
+			[ "modifyvm", "{{.Name}}", "--cpus", "1" ],
+			[ "modifyvm", "{{.Name}}", "--natpf1", "vm_ssh,tcp,,3022,,22" ],
+			[ "modifyvm", "{{.Name}}", "--natpf1", "vm_http,tcp,,8080,,80" ],
+			[ "modifyvm", "{{.Name}}", "--natpf1", "vm_http2,tcp,,8000,,8000" ]
+		]
+	}
+			   ],
+	"provisioners": [{
+		"type": "shell",
+		"script": "scripts/install_ansible.sh"
+		},
+		{
+		"type": "shell",
+        "script": "scripts/vbox_additions.sh"
+		},
+		{
+		"type": "ansible-local",
+		"playbook_file": "ansible/vm.yml",
+		"playbook_dir": "ansible",
+		"group_vars": "ansible/vm_vars",
+		"role_paths": [
+			"ansible/roles"
+		],
+		"extra_arguments": ["--extra-vars 'branch=develop'", "-vvvv"]
+	}, {
+		"type": "shell",
+		"script": "scripts/set_message_dev.sh"
+	}, {
+		"type": "shell",
+		"script": "scripts/zerofree.sh"
+	}],
+    "post-processors": [{
+    "type": "vagrant",
+    "keep_input_artifact": true,
+    "compression_level": 1,
+    "output": "output-virtualbox-ovf/ERPNext-Vagrant.box",
+    "vagrantfile_template": "Vagrantfile"
+}]
+}
