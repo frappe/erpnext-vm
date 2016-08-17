@@ -20,4 +20,4 @@ Packer imports the base image in a virtual machine and boots it. It runs the fol
 
 #### For a build server
 
-Running the `build.py` script builds a vm and puts it in `~/public`. It also creates md5 hash files for every VM created. 
+Running the `build.py` script builds the VMs and puts them in `~/public`. It also creates md5 hash files for every VM created. 
