@@ -1,5 +1,5 @@
 ---
-  - name: Apply basic roles  
+  - name: Apply basic roles
     hosts: all
     become: yes
     become_user: root
@@ -23,7 +23,6 @@
             - zlib-devel
             - bzip2-devel
             - openssl-devel
-            - postfix
             - python-devel
             - mariadb
             - redis
@@ -36,17 +35,8 @@
             - xorg-x11-fonts-Type1
             - screen
             - vim
-            - git
-            - nginx
-            - zlib-devel
-            - bzip2-devel
-            - openssl-devel
+            - openldap-devel
             - postfix
-            - python-devel
-            - redis
-            - cronie
-            - sudo
-            - which
             - supervisor
             - nodejs
             - npm
@@ -59,6 +49,7 @@
             - tcl-devel
             - tk-devel
           when: ansible_os_family == 'RedHat'
+
         - name: Install packages
           apt: pkg={{ item }} state=present
           with_items:
@@ -99,6 +90,7 @@
             - tcl8.6-dev
             - tk8.6-dev
             - python-tk
+            - libldap2-dev
+            - libsasl2-dev
           when: ansible_os_family == 'Debian'
         - user: name="{{ frappe_user }}"
-        
