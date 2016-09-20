@@ -21,7 +21,7 @@ def get_app(app, url, branch, bench_path):
 def install_site(site, mariadb_root_password, bench_path):
     admin_password = site.get('admin_password')
     site_name = site['name']
-    subprocess.check_call("bench new-site {} --mariadb-root-password {} --admin-password {}".format(site_name, mariadb_root_password, admin_password), cwd=bench_path, shell=True)
+    subprocess.check_call("bench new-site {} --mariadb-root-password {} --admin-password {} --db-name erpnext.vm".format(site_name, mariadb_root_password, admin_password), cwd=bench_path, shell=True)
 
     for app in site['apps']:
         subprocess.check_call("bench --site {} install-app {}".format(site['name'], app), cwd=bench_path, shell=True)
