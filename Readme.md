@@ -1,3 +1,7 @@
+## THIS REPO IS DEPRECATED
+
+If you wish to build the ERPNext VM images for the current versions, please check out the [bench](https://github.com/frappe/bench) repository for more information.
+
 ### ERPNext VM Builder
 
 #### Steps to build a vm image
